@@ -2,7 +2,7 @@ import java.util.*;
 
 public class MultiAlign {
 
-    Map<String, Map <String, Float>> M;
+    /*Map<String, Map <String, Float>> M;
 
     {
         M = new HashMap<String, Map <String, Float>>();
@@ -10,7 +10,54 @@ public class MultiAlign {
         mapA.put("A", (float)4);
         mapA.put("C", (float)0);
         M.put("A", mapA);
-    }
+    }*/
+
+    //A  R  N  D  C  Q  E  G  H  I  L  K  M  F  P  S  T  W  Y  V
+
+    Map<String, Integer> MIndirect = new HashMap<String, Integer>() {{
+        put("A", 0);
+        put("R", 1);
+        put("N", 2);
+        put("D", 3);
+        put("C", 4);
+        put("Q", 5);
+        put("E", 6);
+        put("G", 7);
+        put("H", 8);
+        put("I", 9);
+        put("L", 10);
+        put("K", 11);
+        put("M", 12);
+        put("F", 13);
+        put("P", 14);
+        put("S", 15);
+        put("T", 16);
+        put("W", 17);
+        put("Y", 18);
+        put("V", 19);
+    }};
+
+    private static final int[][] M = {
+            { 4, -1, -2, -2,  0, -1, -1,  0, -2, -1, -1, -1, -1, -2, -1,  1,  0, -3, -2,  0},
+            {-1,  5,  0, -2, -3,  1,  0, -2,  0, -3, -2,  2, -1, -3, -2, -1, -1, -3, -2, -3},
+            {-2,  0,  6,  1, -3,  0,  0,  0,  1, -3, -3,  0, -2, -3, -2,  1,  0, -4, -2, -3},
+            {-2, -2,  1,  6, -3,  0,  2, -1, -1, -3, -4, -1, -3, -3, -1,  0, -1, -4, -3, -3},
+            { 0, -3, -3, -3,  9, -3, -4, -3, -3, -1, -1, -3, -1, -2, -3, -1, -1, -2, -2, -1},
+            {-1,  1,  0,  0, -3,  5,  2, -2,  0, -3, -2,  1,  0, -3, -1,  0, -1, -2, -1, -2},
+            {-1,  0,  0,  2, -4,  2,  5, -2,  0, -3, -3,  1, -2, -3, -1,  0, -1, -3, -2, -2},
+            { 0, -2,  0, -1, -3, -2, -2,  6, -2, -4, -4, -2, -3, -3, -2,  0, -2, -2, -3, -3},
+            {-2,  0,  1, -1, -3,  0,  0, -2,  8, -3, -3, -1, -2, -1, -2, -1, -2, -2,  2, -3},
+            {-1, -3, -3, -3, -1, -3, -3, -4, -3,  4,  2, -3,  1,  0, -3, -2, -1, -3, -1,  3},
+            {-1, -2, -3, -4, -1, -2, -3, -4, -3,  2,  4, -2,  2,  0, -3, -2, -1, -2, -1,  1},
+            {-1,  2,  0, -1, -3,  1,  1, -2, -1, -3, -2,  5, -1, -3, -1,  0, -1, -3, -2, -2},
+            {-1, -1, -2, -3, -1,  0, -2, -3, -2,  1,  2, -1,  5,  0, -2, -1, -1, -1, -1,  1},
+            {-2, -3, -3, -3, -2, -3, -3, -3, -1,  0,  0, -3,  0,  6, -4, -2, -2,  1,  3, -1},
+            {-1, -2, -2, -1, -3, -1, -1, -2, -2, -3, -3, -1, -2, -4,  7, -1, -1, -4, -3, -2},
+            { 1, -1,  1,  0, -1,  0,  0,  0, -1, -2, -2,  0, -1, -2, -1,  4,  1, -3, -2, -2},
+            { 0, -1,  0, -1, -1, -1, -1, -2, -2, -1, -1, -1, -1, -2, -1,  1,  5, -2, -2,  0},
+            {-3, -3, -4, -4, -2, -2, -3, -2, -2, -3, -2, -3, -1,  1, -4, -3, -2, 11,  2, -3},
+            {-2, -2, -2, -3, -2, -1, -2, -3,  2, -1, -1, -2, -1,  3, -3, -2, -2,  2,  7, -1},
+            { 0, -3, -3, -3, -1, -2, -2, -3, -3,  3,  1, -2,  1, -1, -2, -2,  0, -3, -1,  4}};
 
     public float mergeAlign(Map<String, String> aln, String ID, String seq, float gap) {
         List<String> keys = new ArrayList<>(aln.keySet());
@@ -30,7 +77,7 @@ public class MultiAlign {
                     if (((s.charAt(i) == '-') && (t.charAt(i) != '-')) || ((s.charAt(i) != '-') && (t.charAt(i) == '-'))) {
                         sop[i] += gap;
                     } else if ((s.charAt(i) != '-') && (t.charAt(i) != '-')) {
-                        sop[i] += M.get(s.charAt(i)).get(t.charAt(i));
+                        sop[i] += M[MIndirect.get(s.charAt(i))][MIndirect.get(t.charAt(i))];
                     }
                 }
             }
@@ -55,7 +102,7 @@ public class MultiAlign {
                     if (s.charAt(i-1) == '-') {
                         options.put("ij", v+gap);
                     } else {
-                        options.put("ij", v+M.get(s.charAt(i-1)).get(seq.charAt(j-1)));
+                        options.put("ij", v+M[MIndirect.get(s.charAt(i-1))][MIndirect.get(seq.charAt(j-1))]);
                     }
                 }
                 S[i][j] = Collections.max(options.values());
@@ -106,16 +153,16 @@ public class MultiAlign {
     }
 
     public class Entry implements Comparable<Entry> {
-        private int key;
+        private float key;
         private String value;
 
-        public Entry(int key, String value) {
+        public Entry(float key, String value) {
             this.key = key;
             this.value = value;
         }
 
         // getters
-        public int getKey() {
+        public float getKey() {
             return key;
         }
 
@@ -136,9 +183,9 @@ public class MultiAlign {
     public Map<String, String> multiAlign(Map<String, String> seqs, float gap) {
         List<String> IDs = new ArrayList<>(seqs.keySet());
         Collections.sort(IDs);
-        Map<String, Map<String, Integer>> dm = new HashMap<String, Map<String, Integer>>();
+        Map<String, Map<String, Float>> dm = new HashMap<String, Map<String, Float>>();
         for(String ID : IDs) {
-            dm.put(ID, new HashMap<String, Integer>());
+            dm.put(ID, new HashMap<String, Float>());
         }
 
         PairAlign pA = new PairAlign();
@@ -150,10 +197,10 @@ public class MultiAlign {
                 in.put(iID, seqs.get(iID));
                 in.put(jID, seqs.get(jID));
                 float d = -1 * pA.pairAlign(in, gap);
-                Map<String, Integer> dmiID = dm.get(iID);
+                Map<String, Float> dmiID = dm.get(iID);
                 dmiID.put(jID, d);
                 dm.put(iID, dmiID);
-                Map<String, Integer> dmjID = dm.get(jID);
+                Map<String, Float> dmjID = dm.get(jID);
                 dmjID.put(iID, d);
                 dm.put(jID, dmjID);
             }
