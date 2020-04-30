@@ -9,7 +9,7 @@ public class Driver {
         Common c = new Common();
         Map<String, String> seqs = c.parseFasta();
         MultiAlign m = new MultiAlign();
-        float gap = (float)0.1;
+        float gap = (float)-3.32192809489;
         Map<String, String> aln = m.multiAlign(seqs, gap);
         List<String> IDs = new ArrayList<>(aln.keySet());
         Collections.sort(IDs);

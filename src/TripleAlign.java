@@ -80,7 +80,7 @@ public class TripleAlign {
         for(int x=1; x<lenR+1; ++x){
             for(int y=1; y<lenS+1; ++y){
                 Map<String, Float> options = new HashMap<String, Float>();
-                options.put("xy", S[x-1][y-1][0] + M[MIndirect.get(r.charAt(x-1))][MIndirect.get(s.charAt(y-1))] + 2*g);
+                options.put("xy", S[x-1][y-1][0] + M[MIndirect.get(Character.toString(r.charAt(x-1)))][MIndirect.get(Character.toString(s.charAt(y-1)))] + 2*g);
                 options.put("x", S[x-1][y][0] + 2*g);
                 options.put("y", S[x][y-1][0] + 2*g);
                 S[x][y][0] = Collections.max(options.values());
@@ -96,7 +96,7 @@ public class TripleAlign {
         for(int x=1; x<lenR+1; ++x){
             for(int z=1; z<lenT+1; ++z){
                 Map<String, Float> options = new HashMap<String, Float>();
-                options.put("xz", S[x-1][0][z-1] + M[MIndirect.get(r.charAt(x-1))][MIndirect.get(t.charAt(z-1))] + 2*g);
+                options.put("xz", S[x-1][0][z-1] + M[MIndirect.get(Character.toString(r.charAt(x-1)))][MIndirect.get(Character.toString(t.charAt(z-1)))] + 2*g);
                 options.put("x", S[x-1][0][z] + 2*g);
                 options.put("z", S[x][0][z-1] + 2*g);
                 S[x][0][z] = Collections.max(options.values());
@@ -112,7 +112,7 @@ public class TripleAlign {
         for(int y=1; y<lenS+1; ++y){
             for(int z=1; z<lenT+1; ++z){
                 Map<String, Float> options = new HashMap<String, Float>();
-                options.put("yz", S[0][y-1][z-1] + M[MIndirect.get(s.charAt(y-1))][MIndirect.get(t.charAt(z-1))] + 2*g);
+                options.put("yz", S[0][y-1][z-1] + M[MIndirect.get(Character.toString(s.charAt(y-1)))][MIndirect.get(Character.toString(t.charAt(z-1)))] + 2*g);
                 options.put("y", S[0][y-1][z] + 2*g);
                 options.put("z", S[0][y][z-1] + 2*g);
                 S[0][y][z] = Collections.max(options.values());
@@ -129,12 +129,12 @@ public class TripleAlign {
             for(int y=1; y<lenS+1; ++y) {
                 for (int z = 1; z < lenT + 1; ++z) {
                     Map<String, Float> options = new HashMap<String, Float>();
-                    options.put("xyz", S[x - 1][y - 1][z - 1] + M[MIndirect.get(r.charAt(x - 1))][MIndirect.get(s.charAt(y - 1))]
-                            + M[MIndirect.get(r.charAt(x - 1))][MIndirect.get(t.charAt(z - 1))]
-                            + M[MIndirect.get(s.charAt(y - 1))][MIndirect.get(t.charAt(z - 1))]);
-                    options.put("xy", S[x - 1][y - 1][z] + M[MIndirect.get(r.charAt(x - 1))][MIndirect.get(s.charAt(y - 1))] + 2 * g);
-                    options.put("xz", S[x - 1][y][z - 1] + M[MIndirect.get(r.charAt(x - 1))][MIndirect.get(t.charAt(z - 1))] + 2 * g);
-                    options.put("yz", S[x][y - 1][z - 1] + M[MIndirect.get(s.charAt(y - 1))][MIndirect.get(t.charAt(z - 1))] + 2 * g);
+                    options.put("xyz", S[x - 1][y - 1][z - 1] + M[MIndirect.get(Character.toString(r.charAt(x - 1)))][MIndirect.get(Character.toString(s.charAt(y - 1)))]
+                            + M[MIndirect.get(Character.toString(r.charAt(x - 1)))][MIndirect.get(Character.toString(t.charAt(z - 1)))]
+                            + M[MIndirect.get(Character.toString(s.charAt(y - 1)))][MIndirect.get(Character.toString(t.charAt(z - 1)))]);
+                    options.put("xy", S[x - 1][y - 1][z] + M[MIndirect.get(Character.toString(r.charAt(x - 1)))][MIndirect.get(Character.toString(s.charAt(y - 1)))] + 2 * g);
+                    options.put("xz", S[x - 1][y][z - 1] + M[MIndirect.get(Character.toString(r.charAt(x - 1)))][MIndirect.get(Character.toString(t.charAt(z - 1)))] + 2 * g);
+                    options.put("yz", S[x][y - 1][z - 1] + M[MIndirect.get(Character.toString(s.charAt(y - 1)))][MIndirect.get(Character.toString(t.charAt(z - 1)))] + 2 * g);
                     options.put("x", S[x - 1][y][z] + 2 * g);
                     options.put("y", S[x][y - 1][z] + 2 * g);
                     options.put("z", S[x][y][z - 1] + 2 * g);
@@ -172,7 +172,7 @@ public class TripleAlign {
             }
             if(bt.contains("y")){
                 String v = out.get(sID);
-                out.put(tID, v + s.charAt(y-1));
+                out.put(sID, v + s.charAt(y-1));
                 y -= 1;
             } else {
                 String v = out.get(sID);

@@ -37,7 +37,7 @@ public class PairAlign {
         put("V", 19);
     }};
 
-    private static final int[][] M = {
+    int[][] M = {
             { 4, -1, -2, -2,  0, -1, -1,  0, -2, -1, -1, -1, -1, -2, -1,  1,  0, -3, -2,  0},
             {-1,  5,  0, -2, -3,  1,  0, -2,  0, -3, -2,  2, -1, -3, -2, -1, -1, -3, -2, -3},
             {-2,  0,  6,  1, -3,  0,  0,  0,  1, -3, -3,  0, -2, -3, -2,  1,  0, -4, -2, -3},
@@ -84,7 +84,7 @@ public class PairAlign {
         for(int i=1; i<lenS+1; ++i){
             for(int j=1; j<lenT+1; ++j){
                 Map<String, Float> options = new HashMap<String, Float>();
-                options.put("ij", S[i-1][j-1] + M[MIndirect.get(s.charAt(i-1))][MIndirect.get(t.charAt(j-1))]);
+                options.put("ij", S[i-1][j-1] + M[MIndirect.get(Character.toString(s.charAt(i-1)))][MIndirect.get(Character.toString(t.charAt(j-1)))]);
                 options.put("i", S[i-1][j] + gap);
                 options.put("j", S[i][j-1] + gap);
                 S[i][j] = Collections.max(options.values());
@@ -115,7 +115,7 @@ public class PairAlign {
             }
             if(bt.contains("j")){
                 String v = out.get(tID);
-                out.put(tID, v + s.charAt(j-1));
+                out.put(tID, v + t.charAt(j-1));
                 j -= 1;
             } else {
                 String v = out.get(tID);

@@ -72,12 +72,12 @@ public class MultiAlign {
         for (int iKey = 0; iKey < keys.size() - 1; ++iKey) {
             String s = aln.get(keys.get(iKey));
             for (int jKey = iKey + 1; jKey < keys.size(); ++jKey) {
-                String t = aln.get(keys.get(iKey));
+                String t = aln.get(keys.get(jKey));
                 for (int i = 0; i < n; ++i) {
                     if (((s.charAt(i) == '-') && (t.charAt(i) != '-')) || ((s.charAt(i) != '-') && (t.charAt(i) == '-'))) {
                         sop[i] += gap;
                     } else if ((s.charAt(i) != '-') && (t.charAt(i) != '-')) {
-                        sop[i] += M[MIndirect.get(s.charAt(i))][MIndirect.get(t.charAt(i))];
+                        sop[i] += M[MIndirect.get(Character.toString(s.charAt(i)))][MIndirect.get(Character.toString(t.charAt(i)))];
                     }
                 }
             }
@@ -102,7 +102,7 @@ public class MultiAlign {
                     if (s.charAt(i-1) == '-') {
                         options.put("ij", v+gap);
                     } else {
-                        options.put("ij", v+M[MIndirect.get(s.charAt(i-1))][MIndirect.get(seq.charAt(j-1))]);
+                        options.put("ij", v+M[MIndirect.get(Character.toString(s.charAt(i-1)))][MIndirect.get(Character.toString(seq.charAt(j-1)))]);
                     }
                 }
                 S[i][j] = Collections.max(options.values());
@@ -172,9 +172,9 @@ public class MultiAlign {
 
         @Override
         public int compareTo(Entry other) {
-            if (this.getKey() < other.getKey())
+            if (this.getKey() > other.getKey())
                 return 1;
-            else if (this.getKey() > other.getKey())
+            else if (this.getKey() < other.getKey())
                 return -1;
             return 0;
         }
@@ -185,12 +185,14 @@ public class MultiAlign {
         Collections.sort(IDs);
         Map<String, Map<String, Float>> dm = new HashMap<String, Map<String, Float>>();
         for(String ID : IDs) {
-            dm.put(ID, new HashMap<String, Float>());
+            Map<String, Float> val = new HashMap<String, Float>();
+            val.put(ID, (float)0);
+            dm.put(ID, val);
         }
 
         PairAlign pA = new PairAlign();
         for (int i = 0; i < IDs.size() - 1; ++i) {
-            for (int j = i + 1; j < IDs.size(); ++i) {
+            for (int j = i + 1; j < IDs.size(); ++j) {
                 String iID = IDs.get(i);
                 String jID = IDs.get(j);
                 Map<String, String> in = new HashMap<String, String>();
@@ -211,7 +213,7 @@ public class MultiAlign {
         float bestPaird = Float.MAX_VALUE;
         for (int i = 0; i < IDs.size() - 1; ++i) {
             String iID = IDs.get(i);
-            for (int j = i + 1; j < IDs.size(); ++i) {
+            for (int j = i + 1; j < IDs.size(); ++j) {
                 String jID = IDs.get(j);
                 float d = dm.get(iID).get(jID);
                 if (((bestPairiID == null) && (bestPairjID == null)) || (d < bestPaird)) {
@@ -251,15 +253,17 @@ public class MultiAlign {
         }
 
         while (out.keySet().size() < IDs.size()) {
-            Entry dID = pq.poll();
-            String ID = dID.getValue();
-            if (!out.containsKey(ID)) {
-                continue;
-            }
-            mergeAlign(out, ID, seqs.get(ID), gap);
-            for (String newID : IDs) {
-                if (!out.containsKey(newID)) {
-                    pq.add(new Entry(dm.get(newID).get(ID), newID));
+            if (!pq.isEmpty()) {
+                Entry dID = pq.poll();
+                String ID = dID.getValue();
+                if (out.containsKey(ID)) {
+                    continue;
+                }
+                mergeAlign(out, ID, seqs.get(ID), gap);
+                for (String newID : IDs) {
+                    if (!out.containsKey(newID)) {
+                        pq.add(new Entry(dm.get(newID).get(ID), newID));
+                    }
                 }
             }
         }
