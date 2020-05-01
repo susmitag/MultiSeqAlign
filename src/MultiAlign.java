@@ -84,7 +84,7 @@ public class MultiAlign {
         }
 
         for (int i=1; i<n+1; ++i) {
-            S[i][0] = S[i-1][0] + keys.size()*gap;
+            S[i][0] = S[i-1][0] + sop[i-1] + keys.size()*gap;
             B[i][0] = "i";
         }
         for (int j=1; j<m+1; ++j) {

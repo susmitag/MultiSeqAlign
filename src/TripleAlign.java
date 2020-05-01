@@ -50,8 +50,8 @@ public class TripleAlign {
 
     public Map<String, String> tripleAlign(Map<String, String> seqs, float g) {
         List<String> IDs = new ArrayList<>(seqs.keySet());
-        String rID = IDs.get(0);
-        String sID = IDs.get(1);
+        String rID = IDs.get(1);
+        String sID = IDs.get(0);
         String tID = IDs.get(2);
         String r = seqs.get(rID);
         String s = seqs.get(sID);
@@ -137,7 +137,7 @@ public class TripleAlign {
                     options.put("yz", S[x][y - 1][z - 1] + M[MIndirect.get(Character.toString(s.charAt(y - 1)))][MIndirect.get(Character.toString(t.charAt(z - 1)))] + 2 * g);
                     options.put("x", S[x - 1][y][z] + 2 * g);
                     options.put("y", S[x][y - 1][z] + 2 * g);
-                    options.put("z", S[x][y][z - 1] + 2 * g);
+                    options.put("z", S[x][y][z - 1]);
                     S[x][y][z] = Collections.max(options.values());
                     for (String o : options.keySet()) {
                         if (S[x][y][z] == options.get(o)) {
