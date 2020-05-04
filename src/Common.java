@@ -7,7 +7,7 @@ public class Common {
 
     public Map<String, String> parseFasta() throws IOException {
         Map<String, String> seqs = new HashMap<String, String>();
-        FileInputStream fstream = new FileInputStream("/Users/goswama2/Documents/personal/123/out/production/MultiSeqAlign/1.fas");
+        FileInputStream fstream = new FileInputStream("/Users/goswama2/Documents/personal/123/out/production/MultiSeqAlign/cancers_truncated.fas");
         BufferedReader br = new BufferedReader(new InputStreamReader(fstream));
 
         String strLine;

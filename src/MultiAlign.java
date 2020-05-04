@@ -106,8 +106,9 @@ public class MultiAlign {
                     }
                 }
                 S[i][j] = Collections.max(options.values());
-                for (String o : options.keySet()) {
-                    if (S[i][j] == options.get(o)) {
+                String[] k = {"i", "j", "ij"};
+                for (String o : k) {
+                    if (options.get(o) == S[i][j]) {
                         B[i][j] = o;
                         break;
                     }
