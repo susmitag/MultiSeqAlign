@@ -2,16 +2,7 @@ import java.util.*;
 
 public class MultiAlign {
 
-    /*Map<String, Map <String, Float>> M;
-
-    {
-        M = new HashMap<String, Map <String, Float>>();
-        Map <String, Float> mapA = new HashMap<String, Float>();
-        mapA.put("A", (float)4);
-        mapA.put("C", (float)0);
-        M.put("A", mapA);
-    }*/
-
+    //BLOSUM62
     //A  R  N  D  C  Q  E  G  H  I  L  K  M  F  P  S  T  W  Y  V
 
     Map<String, Integer> MIndirect = new HashMap<String, Integer>() {{
@@ -59,6 +50,7 @@ public class MultiAlign {
             {-2, -2, -2, -3, -2, -1, -2, -3,  2, -1, -1, -2, -1,  3, -3, -2, -2,  2,  7, -1},
             { 0, -3, -3, -3, -1, -2, -2, -3, -3,  3,  1, -2,  1, -1, -2, -2,  0, -3, -1,  4}};
 
+    // merge single sequence with alignment using DP (which column does each symbol best fit)
     public float mergeAlign(Map<String, String> aln, String ID, String seq, float gap) {
         List<String> keys = new ArrayList<>(aln.keySet());
         Collections.sort(keys);
@@ -68,6 +60,7 @@ public class MultiAlign {
         float[][] S = new float[n+1][m+1];
         String[][] B = new String[n+1][m+1];
 
+        // compute sum-of-pairs for each column of alignment beforehand to save time later
         float[] sop = new float[n];
         for (int iKey = 0; iKey < keys.size() - 1; ++iKey) {
             String s = aln.get(keys.get(iKey));
@@ -83,6 +76,7 @@ public class MultiAlign {
             }
         }
 
+        // perform DP
         for (int i=1; i<n+1; ++i) {
             S[i][0] = S[i-1][0] + sop[i-1] + keys.size()*gap;
             B[i][0] = "i";
@@ -115,6 +109,8 @@ public class MultiAlign {
                 }
             }
         }
+
+        // backtrack
         int i = n;
         int j = m;
         Map<String, String> out = new HashMap<String, String>();
@@ -153,6 +149,7 @@ public class MultiAlign {
         return outScore;
     }
 
+    // priority queue entry
     public class Entry implements Comparable<Entry> {
         private float key;
         private String value;
@@ -182,6 +179,7 @@ public class MultiAlign {
     }
 
     public Map<String, String> multiAlign(Map<String, String> seqs, float gap) {
+        // create distance matrix
         List<String> IDs = new ArrayList<>(seqs.keySet());
         Collections.sort(IDs);
         Map<String, Map<String, Float>> dm = new HashMap<String, Map<String, Float>>();
@@ -191,6 +189,7 @@ public class MultiAlign {
             dm.put(ID, val);
         }
 
+        // generate distance matrix from pairwise alignments
         PairAlign pA = new PairAlign();
         for (int i = 0; i < IDs.size() - 1; ++i) {
             for (int j = i + 1; j < IDs.size(); ++j) {
@@ -209,6 +208,7 @@ public class MultiAlign {
             }
         }
 
+        // find 3 closest sequences for start
         String bestPairiID = null;
         String bestPairjID = null;
         float bestPaird = Float.MAX_VALUE;
@@ -236,6 +236,8 @@ public class MultiAlign {
                 bestThirdd = d;
             }
         }
+
+        // merge alignments
         Map<String, String> in = new HashMap<String, String>();
         in.put(bestPairiID, seqs.get(bestPairiID));
         in.put(bestPairjID, seqs.get(bestPairjID));

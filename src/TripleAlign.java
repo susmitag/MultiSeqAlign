@@ -1,6 +1,8 @@
 import java.util.*;
 
 public class TripleAlign {
+
+    //BLOSUM62
     //A  R  N  D  C  Q  E  G  H  I  L  K  M  F  P  S  T  W  Y  V
 
     Map<String, Integer> MIndirect = new HashMap<String, Integer>() {{
@@ -62,6 +64,7 @@ public class TripleAlign {
         float[][][] S = new float[lenR+1][lenS+1][lenT+1];
         String[][][] B = new String[lenR+1][lenS+1][lenT+1];
 
+        // perform DP 1D
         for(int x=1; x<lenR+1; ++x){
             S[x][0][0] = 2*x*g;
             B[x][0][0] = "x";
@@ -77,6 +80,7 @@ public class TripleAlign {
             B[0][0][z] = "z";
         }
 
+        // perform DP 2D
         for(int x=1; x<lenR+1; ++x){
             for(int y=1; y<lenS+1; ++y){
                 Map<String, Float> options = new HashMap<String, Float>();
@@ -125,6 +129,7 @@ public class TripleAlign {
             }
         }
 
+        // perform DP 3D
         for(int x=1; x<lenR+1; ++x){
             for(int y=1; y<lenS+1; ++y) {
                 for (int z = 1; z < lenT + 1; ++z) {
@@ -149,7 +154,7 @@ public class TripleAlign {
             }
         }
 
-
+        // backtrack
         int x = lenR;
         int y = lenS;
         int z = lenT;
@@ -157,8 +162,6 @@ public class TripleAlign {
         out.put(rID, "");
         out.put(sID, "");
         out.put(tID, "");
-
-
 
         while(x+y+z != 0) {
             String bt = B[x][y][z];

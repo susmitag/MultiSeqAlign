@@ -2,16 +2,7 @@ import java.util.*;
 
 public class PairAlign {
 
-    /*Map<String, Map <String, Float>> M;
-
-    {
-        M = new HashMap<String, Map <String, Float>>();
-        Map <String, Float> mapA = new HashMap<String, Float>();
-        mapA.put("A", (float)4);
-        mapA.put("C", (float)0);
-        M.put("A", mapA);
-    }*/
-
+    //BLOSUM62
     //A  R  N  D  C  Q  E  G  H  I  L  K  M  F  P  S  T  W  Y  V
 
     Map<String, Integer> MIndirect = new HashMap<String, Integer>() {{
@@ -71,6 +62,7 @@ public class PairAlign {
         float[][] S = new float[lenS+1][lenT+1];
         String[][] B = new String[lenS+1][lenT+1];
 
+        // perform DP 1D
         for(int i=1; i<lenS+1; ++i){
             S[i][0] = i*gap;
             B[i][0] = "i";
@@ -81,6 +73,7 @@ public class PairAlign {
             B[0][j] = "j";
         }
 
+        // perform DP 2D
         for(int i=1; i<lenS+1; ++i){
             for(int j=1; j<lenT+1; ++j){
                 Map<String, Float> options = new HashMap<String, Float>();
@@ -97,6 +90,7 @@ public class PairAlign {
             }
         }
 
+        // backtrack
         int i = lenS;
         int j = lenT;
         Map<String, String> out = new HashMap<String, String>();
